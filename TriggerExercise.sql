@@ -221,3 +221,56 @@ insert into OrderDetails values
 select * from Orders;
 select * from OrderDetails;
 select * from Products;
+
+
+/*6. Reduce Stock When Order Placed
+Table(s): OrderDetails, Inventory
+Question:
+Write a trigger that reduces the Stock in the Inventory table when a new row is inserted into OrderDetails. Ensure that stock doesn’t go below zero — raise an error if there’s not enough stock.*/
+
+create trigger trReduceStock
+on OrderDetails
+after insert
+as
+begin
+	DECLARE @OrderID INT;
+    DECLARE @TotalPrice DECIMAL(10,2);
+    DECLARE @Quantity INT;
+    DECLARE @ProductID INT;
+	DECLARE @CurrentStock int;
+
+    SELECT 
+        @OrderID = OrderID, 
+        @TotalPrice = Quantity * Price,
+        @Quantity = Quantity,
+        @ProductID = ProductID
+    FROM inserted;
+
+	SELECT @CurrentStock = Stock from Products where ProductID = @ProductID
+	
+	if(@Quantity <=0 or @Quantity > @CurrentStock)
+	begin
+		raiserror('Not enough stock to place the order.', 16, 1);
+		return
+	end
+
+	update Orders
+	set TotalAmount =TotalAmount+ @TotalPrice
+	where OrderID = @OrderID
+
+	update Products
+	set Stock = Stock - @Quantity
+	where ProductID = @ProductID
+
+end
+
+drop trigger trReduceStock
+
+
+insert into OrderDetails values
+(2,3, 5,60);
+
+
+select * from Orders;
+select * from OrderDetails;
+select * from Products;
