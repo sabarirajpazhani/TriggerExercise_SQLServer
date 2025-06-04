@@ -349,3 +349,33 @@ where CustomerID = 2;
 
 select * from Customers;
 select * from DeletedCustomers;
+
+/*9. One Order Per Day per Customer
+Table: Orders
+Question:
+Write a trigger that prevents a customer from inserting more than one order in a single day. Raise an error if they attempt to do so.*/
+create trigger trOrderPerDay
+on Orders
+after insert
+as
+begin
+	if exists (
+		select 1 from inserted i
+		join Orders o 
+		on o.CustomerID = i.CustomerID and cast(o.OrderDate as date) = cast(i.OrderDate as date)
+	)
+	begin
+		raiserror ('Only one order per day is allowed per customer.', 16, 1);
+		return
+	end
+
+	insert into Orders (CustomerID, OrderDate, TotalAmount)
+	select CustomerID, OrderDate, TotalAmount from inserted;
+end
+
+drop trigger trOrderPerDay
+
+insert into Orders values
+(2, Getdate(), 3500);
+
+select * from Orders;
