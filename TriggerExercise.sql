@@ -274,3 +274,32 @@ insert into OrderDetails values
 select * from Orders;
 select * from OrderDetails;
 select * from Products;
+
+
+/*7. Prevent Price Reduction
+Table: Products
+Question:
+Create a trigger that checks if someone is trying to reduce the price of a product. If the new price is lower than the old one, raise an error and rollback the transaction.*/
+
+select * from Products;
+
+create trigger trPreventPrice
+on Products
+after update
+as
+begin
+	if exists(
+		select 1 from inserted i
+		join deleted d 
+		on i.ProductID = d.ProductID
+		where i.Price < d.Price	
+	)
+	begin
+		raiserror('Price reduction is not allowed ',16,1)
+		rollback
+	end
+end
+
+update Products
+set Price = 40
+where ProductID = 1;
