@@ -64,7 +64,6 @@ INSERT Products (ProductName, Price, Stock) VALUES
 ('Mouse',      15.00,  0),
 ('Webcam',     60.00,  5);
 
-
 --create trigger
 create trigger trPreventProducts
 on Products
@@ -84,3 +83,55 @@ end;
 delete from Products where ProductID = 1;
 
 select * from Products;
+
+
+/*3. Track Employee Salary Changes
+Table(s): Employees, SalaryHistory
+Question:
+Write a trigger that captures changes to the Salary column in the Employees table. Store the EmpID, old salary, new salary, and the update time in SalaryHistory.*/
+
+--creating Employee Table
+CREATE TABLE Employees
+(
+    EmpID        INT IDENTITY(1,1) PRIMARY KEY,
+    EmpName      NVARCHAR(60),
+    Salary       DECIMAL(12,2),
+    LastModified DATETIME DEFAULT (GETDATE())
+);
+CREATE TABLE SalaryHistory
+(
+    HistID     INT IDENTITY(101,1) PRIMARY KEY,
+    EmpID      INT,
+    OldSalary  DECIMAL(12,2),
+    NewSalary  DECIMAL(12,2),
+    ChangedAt  DATETIME
+);
+INSERT Employees (EmpName, Salary) VALUES
+('Sam', 50000),
+('Rita',65000);
+
+--creating trigger
+create trigger trEmployeeSalaryLog
+on Employees
+after update
+as
+begin
+	declare @OldSalary int, @NewSalary int,@EmpID int
+	select @EmpID = EmpID , @NewSalary = Salary from inserted
+	select @OldSalary = Salary from deleted where EmpID =@EmpID
+
+	insert into SalaryHistory
+	values (@EmpID, @OldSalary,@NewSalary,GETDATE())
+
+	print 'Salary has been Successfully Updated'
+end
+
+update Employees 
+set Salary = 70000
+where EmpID = 2;
+
+
+select * from Employees;
+select * from SalaryHistory;
+
+	
