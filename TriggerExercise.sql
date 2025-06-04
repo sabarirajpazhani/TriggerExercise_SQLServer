@@ -46,3 +46,41 @@ insert into Users values('Elizabeth','Elizabeth@gmail.com',getdate());
 
 select * from Users;
 select * from Audit_Log;
+
+/*2. Prevent Deletion of Products with Stock
+Table: Products
+Question:
+Create a trigger that prevents deletion of a product from the Products table if the Stock is greater than 0. Raise a meaningful error message.*/
+
+CREATE TABLE Products
+(
+    ProductID   INT IDENTITY PRIMARY KEY,
+    ProductName NVARCHAR(60),
+    Price       DECIMAL(10,2),
+    Stock       INT
+);
+INSERT Products (ProductName, Price, Stock) VALUES
+('Keyboard',   30.00, 15),
+('Mouse',      15.00,  0),
+('Webcam',     60.00,  5);
+
+
+--create trigger
+create trigger trPreventProducts
+on Products
+instead of delete
+as
+begin
+	declare @ProductID int
+	select @ProductID = ProductID from deleted
+	if EXISTS(select 1 from deleted where Stock > 0)
+	begin
+		raiserror('Cannot delete product with stock remaining',16,1)
+		return
+	end
+	delete from Products where ProductID = @ProductID
+end;
+
+delete from Products where ProductID = 1;
+
+select * from Products;
