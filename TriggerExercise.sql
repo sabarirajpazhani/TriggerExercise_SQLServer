@@ -379,3 +379,65 @@ insert into Orders values
 (2, Getdate(), 3500);
 
 select * from Orders;
+
+
+/*10. Log Contact Changes for Customers
+Table: Customers
+Question:
+Create a trigger that logs changes only when either the Email or Phone of a customer is updated. You may optionally create a CustomerChanges table to store old and new values.*/
+create table CustomerChanges(
+	CustomerID int,
+	OldEmail varchar(80),
+	NewEmail varchar(80),
+	OldPhone varchar(30),
+	NewPhone varchar(30)
+);
+select * from Customers;
+
+create trigger trContactLog
+on Customers
+after update
+as
+begin
+	declare @CustomerID int
+	declare @OldEmail varchar(80), @NewEmail varchar(80)
+	declare @OldPhone varchar(30), @NewPhone varchar(30)
+	select 
+		@OldEmail = Email, 
+		@OldPhone = Phone
+	from deleted
+
+	select 
+		@CustomerID = CustomerID,
+		@NewEmail = Email,
+		@NewPhone = Phone
+	from inserted
+
+	insert into CustomerChanges values
+	(@CustomerID,@OldEmail,@NewEmail,@OldPhone,@NewPhone)
+
+	if(update(Email))
+	begin
+		Update Customers
+		set Email = @NewEmail
+		where CustomerID = @CustomerID
+	end
+
+	if(update(Phone))
+	begin
+		update Customers
+		set Phone = @NewPhone
+		where CustomerID = @CustomerID
+	end
+end
+
+drop trigger trContactLog
+
+update Customers
+set Email = 'Balaji007@gmail.com' ,
+	Phone = '8987543276'
+where CustomerID = 3;
+		
+select * from Customers;
+select * from CustomerChanges;
+
