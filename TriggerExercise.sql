@@ -134,4 +134,42 @@ where EmpID = 2;
 select * from Employees;
 select * from SalaryHistory;
 
-	
+/*4. Auto Update 'LastModified' on Employee Update
+Table: Employees
+Question:
+Create a trigger that updates the LastModified column in the Employees table with the current date/time whenever a record is updated.*/
+--Create Employees2 table
+create table Employee2(
+	EmpID int IDENTITY(1,1) primary key,
+	EmpName varchar(40),
+	Salary int,
+	LastModified datetime
+);
+insert into Employee2 values
+('Alice', 25000, '2024-01-11'),
+('Bob',30000, '2024-10-23');
+
+--create trigger
+create trigger trEmployeeUpdateLog
+on Employee2
+after update
+as 
+begin
+	declare @EmpID int
+	select @EmpID = EmpID from inserted
+
+	declare @LastUpdate datetime
+	set @LastUpdate = GETDATE()
+	update Employee2
+	set LastModified = @LastUpdate
+	where EmpID = @EmpID
+end
+
+drop trigger trEmployeeUpdateLog
+
+update Employee2
+set Salary = 50000
+where EmpID = 2;
+
+select * from Employee2;
+
