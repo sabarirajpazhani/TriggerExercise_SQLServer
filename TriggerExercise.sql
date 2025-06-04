@@ -303,3 +303,49 @@ end
 update Products
 set Price = 40
 where ProductID = 1;
+
+
+/*8. Log Deleted Customer Info
+Table(s): Customers, DeletedCustomers
+Question:
+Write a trigger that copies deleted customer information to the DeletedCustomers table along with a timestamp when a record is deleted from the Customers table.*/
+
+--creting the customers table
+create table Customers (
+	CustomerID int identity(1,1) primary key,
+	CustomerName varchar(60),
+	Email varchar(90),
+	Phone varchar(20)
+);
+
+insert into Customers values
+('Arun','Arun@gmail.com','9876543234'),
+('Balaji', 'Balaji@gmail.com','98762546378');
+
+create table DeletedCustomers(
+	CustomerID int,
+	DateAndTime datetime
+);
+--create trigger
+
+create trigger trCustomerLog
+on Customers
+after delete 
+as
+begin
+	declare @CustomerID int
+	select @CustomerID = CustomerID from deleted
+
+	
+	delete from Customers
+	where CustomerID = @CustomerID
+
+	insert into DeletedCustomers values 
+	(@CustomerID, GETDATE())
+end;
+
+delete from Customers
+where CustomerID = 2;
+
+select * from Customers;
+select * from DeletedCustomers;
