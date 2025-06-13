@@ -41,3 +41,11 @@
 
 ![image](https://github.com/user-attachments/assets/f3078eaf-47a6-414f-8693-34296a1f088c)
 
+## 8. Log Deleted Customer Info
+
+**Table(s): Customers, DeletedCustomers**
+
+**Write a trigger that copies deleted customer information to the DeletedCustomers table along with a timestamp when a record is deleted from the Customers table.**
+
+![image](https://github.com/user-attachments/assets/9d204914-9c7a-4822-affd-14f5227ab21f)
+
