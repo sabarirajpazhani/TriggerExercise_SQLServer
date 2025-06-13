@@ -49,3 +49,11 @@
 
 ![image](https://github.com/user-attachments/assets/9d204914-9c7a-4822-affd-14f5227ab21f)
 
+## 10 Log Contact Changes for Customers
+
+**Table: Customers**
+
+**Create a trigger that logs changes only when either the Email or Phone of a customer is updated. You may optionally create a CustomerChanges table to store old and new values.**
+
+![image](https://github.com/user-attachments/assets/a12c127c-cc65-4f4d-8fd0-735d2e0e026c)
+
