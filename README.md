@@ -32,3 +32,12 @@
 **Create a trigger that updates the LastModified column in the Employees table with the current date/time whenever a record is updated.**
 
 ![image](https://github.com/user-attachments/assets/8f520b3d-0072-4515-beb3-c5fc3401857d)
+
+## 7. Prevent Price Reduction
+
+**Table: Products**
+
+**Create a trigger that checks if someone is trying to reduce the price of a product. If the new price is lower than the old one, raise an error and rollback the transaction.**
+
+![image](https://github.com/user-attachments/assets/f3078eaf-47a6-414f-8693-34296a1f088c)
+
