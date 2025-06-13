@@ -15,3 +15,4 @@
 **Create a trigger that prevents deletion of a product from the Products table if the Stock is greater than 0. Raise a meaningful error message.**
 
 ![image](https://github.com/user-attachments/assets/1478c083-58cb-4426-8320-c6c17a704981)
+![image](https://github.com/user-attachments/assets/acfce976-bf2a-4751-ba96-e456fe5f14d6)
