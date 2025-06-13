@@ -25,3 +25,10 @@
 
 ![image](https://github.com/user-attachments/assets/1b3f78ee-5137-4608-ae20-3d94d804ee8f)
 
+## 4. Auto Update 'LastModified' on Employee Update
+
+**Table: Employees**
+
+**Create a trigger that updates the LastModified column in the Employees table with the current date/time whenever a record is updated.**
+
+![image](https://github.com/user-attachments/assets/8f520b3d-0072-4515-beb3-c5fc3401857d)
