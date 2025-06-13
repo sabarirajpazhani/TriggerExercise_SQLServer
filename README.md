@@ -16,3 +16,12 @@
 
 ![image](https://github.com/user-attachments/assets/1478c083-58cb-4426-8320-c6c17a704981)
 ![image](https://github.com/user-attachments/assets/acfce976-bf2a-4751-ba96-e456fe5f14d6)
+
+## 3. Track Employee Salary Changes
+
+**Table(s): Employees, SalaryHistory**
+
+**Write a trigger that captures changes to the Salary column in the Employees table. Store the EmpID, old salary, new salary, and the update time in SalaryHistory.**
+
+![image](https://github.com/user-attachments/assets/1b3f78ee-5137-4608-ae20-3d94d804ee8f)
+
