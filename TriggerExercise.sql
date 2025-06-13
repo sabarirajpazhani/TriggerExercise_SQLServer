@@ -172,57 +172,6 @@ where EmpID = 1;
 select * from Employee2;
 
 
-/*5. Maintain Accurate Total Order Amount
-Table(s): OrderDetails, Orders
-Question:
-Write a trigger that updates the TotalAmount in the Orders table whenever a new record is inserted into the OrderDetails table. Use: TotalAmount += Quantity * Price.*/
-
-CREATE TABLE Orders
-(
-    OrderID     INT IDENTITY(1,1) PRIMARY KEY,
-    CustomerID  INT,
-    OrderDate   DATE   DEFAULT (CONVERT(DATE,GETDATE())),
-    TotalAmount DECIMAL(12,2) DEFAULT 0
-);
-CREATE TABLE OrderDetails
-(
-    OrderDetailID INT IDENTITY(1,1) PRIMARY KEY,
-    OrderID       INT           FOREIGN KEY REFERENCES Orders(OrderID),
-    ProductID     INT           FOREIGN KEY REFERENCES Products(ProductID),
-    Quantity      INT,
-    Price         DECIMAL(10,2)   -- snapshot of price at time of order
-);
-
-Insert into Orders values 
-(1, '2025-01-01',100),
-(2,'2025-03-02',200);
-
-select * from Products;
-select * from Orders;
-
---create trigger
-create trigger trAccurateTotal
-on OrderDetails
-after insert 
-as
-begin
-	declare @OrderID int
-	declare @TotalPrice decimal(10,2)
-	select @OrderID =OrderID, @TotalPrice = Quantity * Price  from inserted
-
-	update Orders
-	set TotalAmount =TotalAmount+ @TotalPrice
-	where OrderID = @OrderID
-end
-
-insert into OrderDetails values 
-(1,1,2,30);
-
-select * from Orders;
-select * from OrderDetails;
-select * from Products;
-
-
 /*6. Reduce Stock When Order Placed
 Table(s): OrderDetails, Inventory
 Question:
